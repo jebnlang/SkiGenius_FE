@@ -25,3 +25,4 @@ npm-debug.log*
 
 # Playwright MCP screenshots
 .playwright-mcp
+.vercel
