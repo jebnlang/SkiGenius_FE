@@ -21,7 +21,7 @@ const Snowfall = ({ count = 250 }) => {
       size,
       depth,
       baseSpeed: 0.5 + depth * 1.5, // Far = slow, near = fast
-      speed: 0.5 + depth * 1.5,
+      speed: 0.3 + depth * 1.5,
       opacity: 0.3 + depth * 0.5, // Far = dim, near = bright
       wobbleOffset: Math.random() * Math.PI * 2,
       wobbleSpeed: 0.02 + Math.random() * 0.02,
@@ -287,3 +287,4 @@ const Snowfall = ({ count = 250 }) => {
 }
 
 export default Snowfall
+  
