@@ -7,6 +7,8 @@ const Snowfall = ({ count = 250 }) => {
   const animationRef = useRef(null)
   const lastMousePos = useRef({ x: 0, y: 0 })
   const lastMouseTime = useRef(Date.now())
+  const accumulationRef = useRef([]) // Snow accumulation heights across the bottom
+  const maxAccumulation = 90 // Maximum snow pile height in pixels
 
   // Create a snowflake particle
   const createParticle = useCallback((canvas, existingParticle = null) => {
@@ -36,6 +38,12 @@ const Snowfall = ({ count = 250 }) => {
       createParticle(canvas)
     )
   }, [count, createParticle])
+
+  // Initialize accumulation array
+  const initAccumulation = useCallback((width) => {
+    const segments = Math.ceil(width / 3) // One height value per 3 pixels
+    accumulationRef.current = new Array(segments).fill(0)
+  }, [])
 
   // Handle mouse movement with velocity tracking
   const handleMouseMove = useCallback((e) => {
@@ -125,10 +133,38 @@ const Snowfall = ({ count = 250 }) => {
         particle.speed += (particle.baseSpeed - particle.speed) * 0.02
       }
 
-      // Reset particle if it goes off screen
-      if (particle.y > canvas.height + 10 ||
-          particle.x < -50 ||
-          particle.x > canvas.width + 50) {
+      // Check for accumulation collision or going off screen
+      const accIndex = Math.floor(particle.x / 3)
+      const accHeight = accumulationRef.current[accIndex] || 0
+      const groundLevel = canvas.height - accHeight
+
+      if (particle.y > groundLevel - particle.size) {
+        // Add to accumulation (only if not at max)
+        if (accHeight < maxAccumulation && particle.x > 0 && particle.x < canvas.width) {
+          // Add snow based on particle size
+          const addAmount = particle.size * 0.8
+
+          // Spread accumulation to neighboring segments for smoother piles
+          for (let offset = -2; offset <= 2; offset++) {
+            const idx = accIndex + offset
+            if (idx >= 0 && idx < accumulationRef.current.length) {
+              const falloff = 1 - Math.abs(offset) * 0.3
+              accumulationRef.current[idx] = Math.min(
+                maxAccumulation,
+                accumulationRef.current[idx] + addAmount * falloff
+              )
+            }
+          }
+        }
+
+        // Recycle particle
+        const newParticle = createParticle(canvas, { x: Math.random() * canvas.width })
+        particlesRef.current[i] = newParticle
+        return
+      }
+
+      // Reset if off screen horizontally
+      if (particle.x < -50 || particle.x > canvas.width + 50) {
         const newParticle = createParticle(canvas, { x: Math.random() * canvas.width })
         particlesRef.current[i] = newParticle
         return
@@ -151,8 +187,43 @@ const Snowfall = ({ count = 250 }) => {
       ctx.fill()
     })
 
+    // Draw snow accumulation
+    if (accumulationRef.current.length > 0) {
+      ctx.beginPath()
+      ctx.moveTo(0, canvas.height)
+
+      // Draw smooth curve through accumulation points
+      for (let i = 0; i < accumulationRef.current.length; i++) {
+        const x = i * 3
+        const height = accumulationRef.current[i]
+        const y = canvas.height - height
+
+        if (i === 0) {
+          ctx.lineTo(x, y)
+        } else {
+          // Smooth curve using quadratic bezier
+          const prevX = (i - 1) * 3
+          const prevHeight = accumulationRef.current[i - 1]
+          const prevY = canvas.height - prevHeight
+          const cpX = (prevX + x) / 2
+          ctx.quadraticCurveTo(prevX, prevY, cpX, (prevY + y) / 2)
+        }
+      }
+
+      ctx.lineTo(canvas.width, canvas.height)
+      ctx.closePath()
+
+      // Gradient fill for snow pile
+      const snowGradient = ctx.createLinearGradient(0, canvas.height - maxAccumulation, 0, canvas.height)
+      snowGradient.addColorStop(0, 'rgba(255, 255, 255, 0.9)')
+      snowGradient.addColorStop(0.3, 'rgba(240, 245, 255, 0.85)')
+      snowGradient.addColorStop(1, 'rgba(220, 230, 245, 0.8)')
+      ctx.fillStyle = snowGradient
+      ctx.fill()
+    }
+
     animationRef.current = requestAnimationFrame((t) => animate(canvas, ctx, t))
-  }, [createParticle])
+  }, [createParticle, maxAccumulation])
 
   // Setup canvas and animation
   useEffect(() => {
@@ -170,10 +241,14 @@ const Snowfall = ({ count = 250 }) => {
       if (particlesRef.current.length === 0) {
         initParticles(canvas)
       }
+
+      // Initialize accumulation array
+      initAccumulation(canvas.width)
     }
 
     handleResize()
     initParticles(canvas)
+    initAccumulation(canvas.width)
 
     // Start animation
     animationRef.current = requestAnimationFrame((t) => animate(canvas, ctx, t))
@@ -200,7 +275,7 @@ const Snowfall = ({ count = 250 }) => {
       window.removeEventListener('mouseleave', handleMouseLeave)
       document.removeEventListener('visibilitychange', handleVisibility)
     }
-  }, [animate, handleMouseMove, handleMouseLeave, initParticles])
+  }, [animate, handleMouseMove, handleMouseLeave, initParticles, initAccumulation])
 
   return (
     <canvas
