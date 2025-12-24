@@ -135,13 +135,14 @@ const EmailCapture = () => {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className="
-                px-6 py-3.5 rounded-xl
-                bg-ski-sky text-white font-medium
+                px-6 py-3.5 rounded-lg
+                bg-ski-ember text-white font-semibold
                 flex items-center justify-center gap-2
                 transition-all duration-300
-                hover:bg-sky-400
+                hover:bg-ski-ember-light
                 disabled:opacity-50 disabled:cursor-not-allowed
-                btn-glow
+                shadow-lg shadow-orange-500/25
+                hover:shadow-orange-500/40
               "
             >
               {status === 'loading' ? (
@@ -152,7 +153,7 @@ const EmailCapture = () => {
                 />
               ) : (
                 <>
-                  <span>Get First Tracks</span>
+                  <span>Join the Waitlist</span>
                   <svg
                     className="w-4 h-4"
                     fill="none"

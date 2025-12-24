@@ -12,11 +12,13 @@ export default {
           sky: '#0EA5E9',
           rock: '#0F172A',
           ice: '#E2E8F0',
+          ember: '#F97316',
+          'ember-light': '#FB923C',
         }
       },
       fontFamily: {
         display: ['Outfit', 'sans-serif'],
-        body: ['Inter', 'sans-serif'],
+        body: ['Space Grotesk', 'sans-serif'],
       },
       animation: {
         'snow-fall': 'snowfall 10s linear infinite',

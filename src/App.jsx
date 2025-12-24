@@ -5,7 +5,7 @@ import EmailCapture from './components/EmailCapture'
 
 function App() {
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-[#0a0f1a]">
+    <div className="relative min-h-screen w-full overflow-hidden bg-[#0a0f1a] texture-overlay">
       {/* Dramatic mountain photo background - responsive */}
       <motion.div
         initial={{ opacity: 0, scale: 1.1 }}
