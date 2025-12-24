@@ -49,9 +49,19 @@ const EmailCapture = () => {
     <motion.div
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 2.5, duration: 0.8, type: 'spring', damping: 20 }}
+      transition={{ delay: 2.6, duration: 0.8, type: 'spring', damping: 20 }}
       className="w-full max-w-md mx-auto"
     >
+      {/* CTA text */}
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2.8, duration: 0.6 }}
+        className="text-center text-ski-ice/50 text-sm mb-4 font-body"
+      >
+        Be the first to know when we drop.
+      </motion.p>
+
       <AnimatePresence mode="wait">
         {status === 'success' ? (
           <motion.div
@@ -69,8 +79,8 @@ const EmailCapture = () => {
             >
               &#10052;
             </motion.div>
-            <p className="text-ski-snow font-medium">You're on the list.</p>
-            <p className="text-ski-ice/60 text-sm mt-1">We'll be in touch.</p>
+            <p className="text-ski-snow font-medium">You're in.</p>
+            <p className="text-ski-ice/60 text-sm mt-1">We'll hit your inbox when it's go time.</p>
           </motion.div>
         ) : status === 'error' ? (
           <motion.div
@@ -142,7 +152,7 @@ const EmailCapture = () => {
                 />
               ) : (
                 <>
-                  <span>Notify Me</span>
+                  <span>Get First Tracks</span>
                   <svg
                     className="w-4 h-4"
                     fill="none"

@@ -68,18 +68,47 @@ function App() {
             // logoAlt="SkiGenius"
           />
 
-          {/* Coming Soon text */}
+          {/* Tagline */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 2, duration: 0.8 }}
-            className="mt-6 text-lg md:text-xl text-ski-ice/60 font-body tracking-wide"
+            className="mt-6 text-sm md:text-base text-ski-sky font-medium tracking-[0.2em] uppercase"
           >
-            Coming Soon.
+            Coming Winter 2025
+          </motion.p>
+
+          {/* Headline */}
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 2.2, duration: 0.8 }}
+            className="mt-6 text-center"
+          >
+            <span className="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-ski-snow leading-tight">
+              Your Mountain.
+            </span>
+            <span className="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-ski-snow/80 leading-tight mt-1">
+              Your Conditions.
+            </span>
+            <span className="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-ski-ice/60 leading-tight mt-1">
+              Your Edge.
+            </span>
+          </motion.h1>
+
+          {/* Value proposition */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 2.4, duration: 0.8 }}
+            className="mt-8 max-w-xl text-center text-base md:text-lg text-ski-ice/70 font-body leading-relaxed"
+          >
+            Real-time snow reports. Insider tips from locals. Gear insights that matter.
+            <span className="text-ski-snow"> The definitive hub for those who live for the mountain.</span>
           </motion.p>
 
           {/* Email capture */}
-          <div className="mt-12 w-full">
+          <div className="mt-10 w-full">
             <EmailCapture />
           </div>
         </div>
